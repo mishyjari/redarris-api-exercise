@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedArrisApi", "RedArrisApi\RedArrisApi.csproj", "{81A92C97-0A7E-4185-81C4-00C64E55B788}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedArrisApi.Tests", "RedArrisApi.Tests\RedArrisApi.Tests.csproj", "{411AED4B-A920-49B7-A9D9-720554C07768}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{81A92C97-0A7E-4185-81C4-00C64E55B788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81A92C97-0A7E-4185-81C4-00C64E55B788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81A92C97-0A7E-4185-81C4-00C64E55B788}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81A92C97-0A7E-4185-81C4-00C64E55B788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{411AED4B-A920-49B7-A9D9-720554C07768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{411AED4B-A920-49B7-A9D9-720554C07768}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{411AED4B-A920-49B7-A9D9-720554C07768}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{411AED4B-A920-49B7-A9D9-720554C07768}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
