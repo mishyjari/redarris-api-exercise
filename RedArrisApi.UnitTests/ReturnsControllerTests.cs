@@ -12,8 +12,8 @@ namespace RedArrisApi.UnitTests;
 public class ReturnsControllerTests
 {
     private readonly ReturnsController _controller;
-    private readonly Mock<IReturnsService> _returnsServiceMock = new();
     private readonly Mock<IPricesService> _pricesServiceMock = new();
+    private readonly Mock<IReturnsService> _returnsServiceMock = new();
 
     public ReturnsControllerTests()
     {
@@ -23,7 +23,7 @@ public class ReturnsControllerTests
             .ReturnsAsync(() => new IexPriceDto[10]);
         _controller = new ReturnsController(_returnsServiceMock.Object, _pricesServiceMock.Object);
     }
-    
+
     [DataTestMethod]
     [DataRow("msft", null, null)]
     [DataRow("msft", "2022-01-01", "2022-06-01")]
@@ -37,7 +37,7 @@ public class ReturnsControllerTests
 
         var result = response.As<OkObjectResult>();
         result.Should().NotBeNull();
-        
+
         var returnDto = result.Value.As<ReturnDto>();
         returnDto.Should().NotBeNull();
 
@@ -85,20 +85,20 @@ public class ReturnsControllerTests
     {
         _pricesServiceMock.Setup(x => x.GetPricesAsync(It.IsAny<string>(), It.IsAny<string?>(), It.IsAny<string?>()))
             .Throws<Exception>();
-        
+
         var response = await _controller.GetReturnsAsync("msft");
 
         response.Should().NotBeNull();
 
         response.As<StatusCodeResult>().StatusCode.Should().Be(500);
     }
-    
+
     [TestMethod]
     public async Task GracefullyReturns500ForFailedReturnsServiceAsync()
     {
         _returnsServiceMock.Setup(x => x.CalculateReturns(It.IsAny<IexPriceDto[]>()))
             .Throws<Exception>();
-        
+
         var response = await _controller.GetReturnsAsync("msft");
 
         response.Should().NotBeNull();

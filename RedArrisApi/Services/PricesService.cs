@@ -15,10 +15,11 @@ public class PricesService : IPricesService
     {
         var client = _httpClientFactory.CreateClient(_iexSettings.IexHttpClientName);
 
-        var requestUrl = $"{_iexSettings.IexPricesUrl}/{ticker}?from={from}&to={to}&sort=ASC&token={_iexSettings.IexApiKey}";
+        var requestUrl =
+            $"{_iexSettings.IexPricesUrl}/{ticker}?from={from}&to={to}&sort=ASC&token={_iexSettings.IexApiKey}";
 
         var response = await client.GetAsync(requestUrl);
-        
+
         // Exception will be caught in the controller
         if (!response.IsSuccessStatusCode)
             throw new Exception(response.ReasonPhrase);

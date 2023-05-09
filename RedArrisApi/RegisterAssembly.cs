@@ -12,26 +12,27 @@ public static class RegisterAssembly
         services.AddControllers();
 
         services.ConfigureIexSettings(configuration);
-        services.ConfigureTokenScheme();
+        services.ConfigureSwaggerAuthorization();
 
         services.AddScoped<ReturnsController>();
         services.AddTransient<IPricesService, PricesService>();
         services.AddTransient<IReturnsService, ReturnsService>();
     }
 
-    private static void ConfigureTokenScheme(this IServiceCollection services)
+    // Configure Swagger to use API Token
+    private static void ConfigureSwaggerAuthorization(this IServiceCollection services)
     {
         services.AddSwaggerGen(o =>
         {
-            o.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme()
+            o.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
             {
                 In = ParameterLocation.Header,
                 Name = "X-API-KEY",
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = "ApiKeyScheme"
             });
-            
-            var key = new OpenApiSecurityScheme()
+
+            var key = new OpenApiSecurityScheme
             {
                 Reference = new OpenApiReference
                 {
@@ -42,7 +43,7 @@ public static class RegisterAssembly
             };
             var requirement = new OpenApiSecurityRequirement
             {
-                { key, new List<string>() }
+                {key, new List<string>()}
             };
             o.AddSecurityRequirement(requirement);
         });
@@ -69,7 +70,7 @@ public static class RegisterAssembly
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
     }
-    
+
     // Configure Swagger and Endpoints (referenced in Program.cs)
     public static WebApplication ConfigureWebApplication(this WebApplication app)
     {
@@ -77,7 +78,7 @@ public static class RegisterAssembly
         app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "RedArris Stock API v1"); });
 
         app.UseRouting();
-        
+
         app.UseMiddleware<ApiKeyMiddleware>();
 
         app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");

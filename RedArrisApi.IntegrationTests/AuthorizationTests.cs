@@ -21,11 +21,8 @@ public class AuthorizationTests
         var apiKey = TestManager
             .GetRequiredService<IConfiguration>()
             .GetValue<string>("apiKey");
-        
-        if (apiKey is null)
-        {
-            throw new NullReferenceException("Internal api key not provided.");
-        }
+
+        if (apiKey is null) throw new NullReferenceException("Internal api key not provided.");
         _apiKey = apiKey!;
     }
 
@@ -38,7 +35,7 @@ public class AuthorizationTests
         var response = await client.GetAsync("returns/msft");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
-    
+
     [TestMethod]
     public async Task SuccessfulResponseWithApiKeyInQueryAsync()
     {
@@ -47,7 +44,7 @@ public class AuthorizationTests
         var response = await client.GetAsync($"returns/msft?apiKey={_apiKey}");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
-    
+
     [TestMethod]
     public async Task UnauthorizedResponseWithBadApiKeyInHeaderAsync()
     {
@@ -57,16 +54,16 @@ public class AuthorizationTests
         var response = await client.GetAsync("returns/msft");
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
-    
+
     [TestMethod]
     public async Task UnauthorizedResponseWithBadApiKeyInQueryAsync()
     {
         var client = _factory.CreateClient();
 
-        var response = await client.GetAsync($"returns/msft?apiKey=definitely-wrong");
+        var response = await client.GetAsync("returns/msft?apiKey=definitely-wrong");
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
-    
+
     [TestMethod]
     public async Task UnauthorizedResponseWithNoApiKeyAsync()
     {

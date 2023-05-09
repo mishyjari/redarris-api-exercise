@@ -7,7 +7,7 @@ namespace RedArrisApi;
 public class IexPriceDto
 {
     [JsonProperty("fclose")] public double ClosePrice { get; set; }
-    
+
     [JsonProperty("priceDate")] public string AsOfDate { get; set; } = string.Empty;
 
     [JsonProperty("symbol")] public string Symbol { get; set; } = string.Empty;

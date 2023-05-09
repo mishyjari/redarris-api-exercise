@@ -18,9 +18,9 @@ namespace RedArrisApi.UnitTests;
 [TestClass]
 public class PricesServiceTests
 {
-    private readonly Mock<IHttpClientFactory> _httpClientFactoryMock = new Mock<IHttpClientFactory>();
-    private IexSettings _iexSettings = new();
+    private readonly Mock<IHttpClientFactory> _httpClientFactoryMock = new();
     private readonly IPricesService _pricesService;
+    private readonly IexSettings _iexSettings = new();
 
     public PricesServiceTests()
     {
@@ -37,7 +37,8 @@ public class PricesServiceTests
     {
         var mockHandler = new Mock<HttpMessageHandler>();
         mockHandler.Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(() => new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
@@ -58,5 +59,5 @@ public class PricesServiceTests
             JsonConvert.DeserializeObject<IEnumerable<IexPriceDto>>(IexSampleResponseJsonString);
 
         result.Count().Should().Be(deserializedSampleData.Count());
-    } 
+    }
 }

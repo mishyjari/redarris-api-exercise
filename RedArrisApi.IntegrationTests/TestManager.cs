@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace RedArrisApi.IntegrationTests;
@@ -14,8 +13,11 @@ public static class TestManager
     {
         return _scope.ServiceProvider.GetRequiredService<T>();
     }
-    
-    public static TestWebFactory<Program> GetWebApplication() => _webFactory;
+
+    public static TestWebFactory<Program> GetWebApplication()
+    {
+        return _webFactory;
+    }
 
     [AssemblyInitialize]
     public static void Initialize(TestContext _)

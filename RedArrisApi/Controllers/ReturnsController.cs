@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using static RedArrisApi.DateTimeExtensions;
 
@@ -55,20 +54,20 @@ public class ReturnsController : ControllerBase
                 return new BadRequestObjectResult("Requested to date is before from date.");
 
             var prices = await _pricesService.GetPricesAsync(ticker, from, to);
-            
+
             // We need at least two values to calculate return, throw exception (caught in controller) if we don't meet this condition
             if (prices.Count() < 2)
                 return new UnprocessableEntityObjectResult(
                     "At least two price entities are required to calculate returns, however fewer than two results were returned from Price Service.");
-            
+
             var returns = _returnsService.CalculateReturns(prices.ToArray());
-            
-            return Ok(new ReturnDto()
+
+            return Ok(new ReturnDto
             {
                 Returns = returns,
                 Symbol = ticker.ToUpper(),
                 FromDate = DateTime.Parse(from),
-                ToDate = DateTime.Parse(to),
+                ToDate = DateTime.Parse(to)
             });
         }
         catch (Exception _)

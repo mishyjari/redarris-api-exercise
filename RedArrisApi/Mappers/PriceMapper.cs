@@ -24,6 +24,8 @@ public class PriceMapper : Profile
 
     // Note that we are using the return as a number-percentage to four decimal places, i.e., 2.15 means 2.15%
     // Remove the * 100 if we just want to use the percentage as its own decimal, i.e., 0.0215
-    private double CalculateReturn(double previousPrice, double currentPrice) =>
-        Math.Round((currentPrice / previousPrice - 1) * 100, 4);
+    private double CalculateReturn(double previousPrice, double currentPrice)
+    {
+        return Math.Round((currentPrice / previousPrice - 1) * 100, 4);
+    }
 }

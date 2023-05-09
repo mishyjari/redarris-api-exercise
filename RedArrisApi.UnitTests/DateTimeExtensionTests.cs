@@ -3,7 +3,8 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace RedArrisApi.UnitTests;
-using static RedArrisApi.DateTimeExtensions;
+
+using static DateTimeExtensions;
 
 [TestClass]
 public class DateTimeExtensionTests

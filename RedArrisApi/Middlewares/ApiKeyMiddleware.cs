@@ -2,11 +2,12 @@ using Microsoft.Extensions.Primitives;
 
 namespace RedArrisApi;
 
+// Define the middleware to be used on a per-request authorization scheme
 public class ApiKeyMiddleware
 {
-    private readonly RequestDelegate _next;
     private const string ApiKeyNameHeaders = "X-API-KEY";
     private const string ApiKeyNameQuery = "apiKey";
+    private readonly RequestDelegate _next;
 
     public ApiKeyMiddleware(RequestDelegate next)
     {
@@ -17,7 +18,6 @@ public class ApiKeyMiddleware
     {
         var providedApiKey = GetApiKeyFromContext(context);
         
-        
         if (providedApiKey is null)
         {
             context.Response.StatusCode = 401;
@@ -25,15 +25,13 @@ public class ApiKeyMiddleware
             return;
         }
 
+        // Get configured API key from Configuration (defined in secrets.json)
         var apiKey = context
             .RequestServices
             .GetRequiredService<IConfiguration>()
             .GetValue<string>("apiKey");
 
-        if (apiKey is null)
-        {
-            throw new NullReferenceException("Internal api key not provided.");
-        }
+        if (apiKey is null) throw new NullReferenceException("Internal api key not provided.");
 
         if (!apiKey!.Equals(providedApiKey))
         {
@@ -45,17 +43,14 @@ public class ApiKeyMiddleware
         await _next(context);
     }
 
+    // Check both headers and query for API Token
     private static StringValues? GetApiKeyFromContext(HttpContext context)
     {
         if (context.Request.Headers.TryGetValue(ApiKeyNameHeaders, out var extractedApiKeyHeaders))
-        {
             return extractedApiKeyHeaders;
-        }
 
         if (context.Request.Query.TryGetValue(ApiKeyNameQuery, out var extractedApiKeyQuery))
-        {
             return extractedApiKeyQuery;
-        }
 
         return null;
     }

@@ -11,12 +11,12 @@ namespace RedArrisApi.UnitTests;
 public class ReturnsServiceTests
 {
     private readonly IReturnsService _returnsService;
-    
+
     public ReturnsServiceTests()
     {
         var mapperMock = new Mock<IMapper>();
         mapperMock.Setup(x => x.Map<Return>(It.IsAny<Tuple<IexPriceDto, IexPriceDto>>()))
-            .Returns((Tuple<IexPriceDto, IexPriceDto> t) => new Return()
+            .Returns((Tuple<IexPriceDto, IexPriceDto> t) => new Return
             {
                 AsOfDate = DateTime.Parse(t.Item2.AsOfDate),
                 ClosePrice = t.Item2.ClosePrice,

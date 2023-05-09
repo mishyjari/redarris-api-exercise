@@ -24,7 +24,7 @@ public class ReturnsControllerTests
         var result = await _controller.GetReturnsAsync("msft");
 
         result.Should().NotBeNull();
-        
+
         var returnDto = result.As<OkObjectResult>().Value.As<ReturnDto>();
         returnDto.Should().NotBeNull();
         returnDto.Returns.Should().NotBeNullOrEmpty();
@@ -47,7 +47,7 @@ public class ReturnsControllerTests
         var result = await _controller.GetReturnsAsync("msft", "2022-01-01", "2022-06-01");
 
         result.Should().NotBeNull();
-        
+
         var returnDto = result.As<OkObjectResult>().Value.As<ReturnDto>();
         returnDto.Should().NotBeNull();
         returnDto.Returns.Should().NotBeNullOrEmpty();
