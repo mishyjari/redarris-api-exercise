@@ -1,5 +1,3 @@
-using RedArrisApi.Models;
-
 namespace RedArrisApi;
 
 public interface IReturnsService

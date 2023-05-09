@@ -1,6 +1,6 @@
 namespace RedArrisApi;
 
-internal static class DateTimeExtensions
+public static class DateTimeExtensions
 {
     public static string? NormalizeDateString(this string inputString)
     {

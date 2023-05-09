@@ -1,9 +1,8 @@
 using AutoMapper;
-using RedArrisApi.Models;
 
-namespace RedArrisApi.Mappers;
+namespace RedArrisApi;
 
-public class PriceMapper : Profile
+internal class PriceMapper : Profile
 {
     public PriceMapper()
     {
@@ -14,7 +13,6 @@ public class PriceMapper : Profile
     {
         CreateMap<IexPriceResponse, Return>()
             .ForMember(dest => dest.AsOfDate, map => map.MapFrom(src => DateTime.Parse(src.AsOfDate)))
-            .ForMember(dest => dest.Ticker, map => map.MapFrom(src => src.Ticker))
             .ForMember(dest => dest.ClosePrice, map => map.MapFrom(src => src.Close));
     }
 }

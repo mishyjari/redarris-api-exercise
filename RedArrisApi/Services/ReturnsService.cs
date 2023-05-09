@@ -1,5 +1,4 @@
 using AutoMapper;
-using RedArrisApi.Models;
 
 namespace RedArrisApi;
 
@@ -14,14 +13,15 @@ public class ReturnsService : IReturnsService
 
     public IEnumerable<Return> CalculateReturns(IexPriceResponse[] prices)
     {
-        // We need at least two values to calculate return, throw exception (caught in controller) if we don't meet this condition
-        if (prices.Length < 2)
-            throw new ArgumentOutOfRangeException(nameof(prices),
-                "At least two price entities are required to calculate returns, however fewer than two results were returned from Price Service.");
-
+        // IEX provides a query param to sort results, so this is not needed now,
+        // However, since our data depends on sequential market day calculations, it may be worth the performance it to confirm we are sorted
+        // prices = prices.OrderBy(p => p.AsOfDate).ToArray();
+        
+        // Since we know the length of our data set, we can make use of the performance benefit of an array versus a list
         var returns = new Return[prices.Length - 1];
 
-        // Parallel is great for larger data sets, but could take a slight performance hit with smaller sets, would be interesting to test run times versus a normal loop
+        // Parallel is great for larger data sets, but could take a slight performance hit with smaller sets
+        // Would be interesting to test run times with different data set sizes versus a normal linear loop.
         Parallel.For(1, prices.Length, i =>
         {
             var currentPrice = prices[i];

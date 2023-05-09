@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace RedArrisApi.Models;
+namespace RedArrisApi;
 
 // We will use adjusted OHLC+V values from IEX
 public class IexPriceResponse

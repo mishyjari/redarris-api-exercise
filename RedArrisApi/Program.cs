@@ -12,8 +12,7 @@ public static class Program
 
         builder
             .Configuration
-            .AddJsonFile("appsettings.json")
-            .AddJsonFile("secrets.json")
+            .AddJsonFile("secrets.json", false, true)
             .AddEnvironmentVariables();
 
         builder.Services.ConfigureServices(builder.Configuration);
