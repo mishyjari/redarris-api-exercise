@@ -25,11 +25,13 @@ public class ReturnsController : ControllerBase
     /// <param name="to">The end date of the time range in YYYY-MM-DD format.</param>
     /// <response code="200">Returns the list of returns.</response>
     /// <response code="400">The specified ticker or date range is invalid.</response>
+    /// <response code="401">The request failed the token challenge</response>
     /// <response code="422">Not enough price results to calculate returns</response>
     /// <response code="500">An error occurred while processing the request.</response>
     [HttpGet("{ticker}")]
     [ProducesResponseType(typeof(ReturnDto), 200)]
     [ProducesResponseType(typeof(string), 400)]
+    [ProducesResponseType(401)]
     [ProducesResponseType(typeof(string), 422)]
     [ProducesResponseType(500)]
     public async Task<IActionResult> GetReturnsAsync(
