@@ -17,19 +17,8 @@ public static class RegisterAssembly
         services.AddTransient<IReturnsService, ReturnsService>();
     }
 
-    public static WebApplication ConfigureWebApplication(this WebApplication app)
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "RedArris Stock API v1"); });
-
-        app.UseRouting();
-
-        app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-
-        return app;
-    }
-
     // Configure settings used for IEX, taking the API Key from secrets.json and register with DI
+    // Create HttpClient for IEX and register with DI
     private static void ConfigureIexSettings(this IServiceCollection services, IConfiguration configuration)
     {
         var apiKey = configuration.GetValue<string>("IexApiKey");
@@ -48,5 +37,18 @@ public static class RegisterAssembly
             {
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
+    }
+    
+    // Configure Swagger and Endpoints (referenced in Program.cs)
+    public static WebApplication ConfigureWebApplication(this WebApplication app)
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "RedArris Stock API v1"); });
+
+        app.UseRouting();
+
+        app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+
+        return app;
     }
 }

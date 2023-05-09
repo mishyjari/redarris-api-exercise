@@ -2,7 +2,7 @@ using AutoMapper;
 
 namespace RedArrisApi;
 
-internal class PriceMapper : Profile
+public class PriceMapper : Profile
 {
     public PriceMapper()
     {
@@ -15,7 +15,7 @@ internal class PriceMapper : Profile
         CreateMap<Tuple<IexPriceDto, IexPriceDto>, Return>()
             .ForMember(dest => dest.Value, map =>
                 map.MapFrom(src =>
-                    CalculateReturn(src.Item2.ClosePrice, src.Item1.ClosePrice)))
+                    CalculateReturn(src.Item1.ClosePrice, src.Item2.ClosePrice)))
             .ForMember(dest => dest.ClosePrice, map =>
                 map.MapFrom(src => src.Item2.ClosePrice))
             .ForMember(dest => dest.AsOfDate, map =>
