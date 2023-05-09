@@ -17,10 +17,10 @@ public class ReturnsControllerTests
 
     public ReturnsControllerTests()
     {
-        _returnsServiceMock.Setup(x => x.CalculateReturns(It.IsAny<IexPriceResponse[]>()))
+        _returnsServiceMock.Setup(x => x.CalculateReturns(It.IsAny<IexPriceDto[]>()))
             .Returns(() => new Return[10]);
         _pricesServiceMock.Setup(x => x.GetPricesAsync(It.IsAny<string>(), It.IsAny<string?>(), It.IsAny<string?>()))
-            .ReturnsAsync(() => new IexPriceResponse[10]);
+            .ReturnsAsync(() => new IexPriceDto[10]);
         _controller = new ReturnsController(_returnsServiceMock.Object, _pricesServiceMock.Object);
     }
     
@@ -29,9 +29,9 @@ public class ReturnsControllerTests
     [DataRow("msft", "2022-01-01", "2022-06-01")]
     [DataRow("msft", "2023-02-01", null)]
     [DataRow("msft", null, "2023-03-01")]
-    public async Task GetPricesSucceedsAsync(string ticker, string start, string end)
+    public async Task GetPricesSucceedsAsync(string ticker, string from, string to)
     {
-        var response = await _controller.GetReturnsAsync(ticker, start, end);
+        var response = await _controller.GetReturnsAsync(ticker, from, to);
 
         response.Should().NotBeNull();
 
@@ -41,8 +41,7 @@ public class ReturnsControllerTests
         var returnDto = result.Value.As<ReturnDto>();
         returnDto.Should().NotBeNull();
 
-        returnDto.Ticker.Should().BeUpperCased(ticker);
-        returnDto.Count.Should().Be(10);
+        returnDto.Symbol.Should().BeUpperCased(ticker);
         returnDto.Returns.Count().Should().Be(10);
     }
 
@@ -61,9 +60,9 @@ public class ReturnsControllerTests
     [DataRow("msft", "2022-06-01", "2022-01-01")]
     [DataRow("msft", "2000-01-01", null)]
     [DataRow("msft", "2000-01-01", "2022-01-01")]
-    public async Task Returns400ForInvalidDatesAsync(string ticker, string start, string end)
+    public async Task Returns400ForInvalidDatesAsync(string ticker, string from, string to)
     {
-        var response = await _controller.GetReturnsAsync(ticker, start, end);
+        var response = await _controller.GetReturnsAsync(ticker, from, to);
         response.Should().NotBeNull();
         response.As<BadRequestObjectResult>()
             .Should().NotBeNull();
@@ -73,7 +72,7 @@ public class ReturnsControllerTests
     public async Task Returns422ForFewerThanTwoPriceResultsAsync()
     {
         _pricesServiceMock.Setup(x => x.GetPricesAsync(It.IsAny<string>(), It.IsAny<string?>(), It.IsAny<string?>()))
-            .ReturnsAsync(() => new IexPriceResponse[1]);
+            .ReturnsAsync(() => new IexPriceDto[1]);
 
         var response = await _controller.GetReturnsAsync("msft");
         response.Should().NotBeNull();
@@ -97,7 +96,7 @@ public class ReturnsControllerTests
     [TestMethod]
     public async Task GracefullyReturns500ForFailedReturnsServiceAsync()
     {
-        _returnsServiceMock.Setup(x => x.CalculateReturns(It.IsAny<IexPriceResponse[]>()))
+        _returnsServiceMock.Setup(x => x.CalculateReturns(It.IsAny<IexPriceDto[]>()))
             .Throws<Exception>();
         
         var response = await _controller.GetReturnsAsync("msft");

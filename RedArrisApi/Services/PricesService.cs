@@ -11,14 +11,14 @@ public class PricesService : IPricesService
         _iexSettings = iexSettings;
     }
 
-    public async Task<IEnumerable<IexPriceResponse>> GetPricesAsync(string ticker, string start, string end)
+    public async Task<IEnumerable<IexPriceDto>> GetPricesAsync(string ticker, string from, string to)
     {
         var client = _httpClientFactory.CreateClient(_iexSettings.IexHttpClientName);
 
-        var requestUrl = $"{_iexSettings.IexPricesUrl}/{ticker}?from={start}&to={end}&sort=ASC&token={_iexSettings.IexApiKey}";
+        var requestUrl = $"{_iexSettings.IexPricesUrl}/{ticker}?from={from}&to={to}&sort=ASC&token={_iexSettings.IexApiKey}";
 
         var response = await client.GetAsync(requestUrl);
 
-        return await response.Content.ReadAsAsync<IEnumerable<IexPriceResponse>>();
+        return await response.Content.ReadAsAsync<IEnumerable<IexPriceDto>>();
     }
 }

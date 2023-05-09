@@ -57,7 +57,7 @@ public class PricesServiceTests
         result.Should().NotBeNull();
 
         var deserializedSampleData =
-            JsonConvert.DeserializeObject<IEnumerable<IexPriceResponse>>(IexSampleResponseJsonString);
+            JsonConvert.DeserializeObject<IEnumerable<IexPriceDto>>(IexSampleResponseJsonString);
 
         result.Count().Should().Be(deserializedSampleData.Count());
     } 

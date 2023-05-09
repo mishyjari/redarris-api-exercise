@@ -1,13 +1,4 @@
 ﻿{
-  "$schema": "https://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:8493",
-      "sslPort": 44397
-    }
-  },
   "profiles": {
     "redarris_exercise": {
       "commandName": "Project",
