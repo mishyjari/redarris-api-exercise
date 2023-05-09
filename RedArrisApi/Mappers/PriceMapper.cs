@@ -11,7 +11,6 @@ internal class PriceMapper : Profile
 
     private void ConfigureMappings()
     {
-
         // Take the previousPrice and currenPrice in as a Tuple to calculate daily return
         CreateMap<Tuple<IexPriceDto, IexPriceDto>, Return>()
             .ForMember(dest => dest.Value, map =>

@@ -15,11 +15,12 @@ public class ReturnsServiceTests
     public ReturnsServiceTests()
     {
         var mapperMock = new Mock<IMapper>();
-        mapperMock.Setup(x => x.Map<Return>(It.IsAny<IexPriceDto>()))
-            .Returns((IexPriceDto p) => new Return()
+        mapperMock.Setup(x => x.Map<Return>(It.IsAny<Tuple<IexPriceDto, IexPriceDto>>()))
+            .Returns((Tuple<IexPriceDto, IexPriceDto> t) => new Return()
             {
-                AsOfDate = DateTime.Parse(p.AsOfDate),
-                ClosePrice = p.ClosePrice
+                AsOfDate = DateTime.Parse(t.Item2.AsOfDate),
+                ClosePrice = t.Item2.ClosePrice,
+                Value = 10
             });
 
         _returnsService = new ReturnsService(mapperMock.Object);
@@ -47,9 +48,8 @@ public class ReturnsServiceTests
             }
         };
 
-        var returns = _returnsService.CalculateReturns(prices);
-        returns.Count().Should().Be(2);
+        var returns = _returnsService.CalculateReturns(prices).ToList();
+        returns.Count.Should().Be(2);
         returns.First().Value.Should().Be(10);
-        returns.Last().Value.Should().Be(-18.1818);
     }
 }

@@ -18,6 +18,10 @@ public class PricesService : IPricesService
         var requestUrl = $"{_iexSettings.IexPricesUrl}/{ticker}?from={from}&to={to}&sort=ASC&token={_iexSettings.IexApiKey}";
 
         var response = await client.GetAsync(requestUrl);
+        
+        // Exception will be caught in the controller
+        if (!response.IsSuccessStatusCode)
+            throw new Exception(response.ReasonPhrase);
 
         return await response.Content.ReadAsAsync<IEnumerable<IexPriceDto>>();
     }
