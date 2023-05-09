@@ -1,7 +1,7 @@
 # Returns API
 
 This project is a simple RESTful API that retrieves historical stock price data from the IEX Cloud API and calculates
-daily returns. The API provides endpoints for retrieving returns for a specified stock symbol within a given date range.
+daily returns. The API provides an endpoint for retrieving returns for a specified stock symbol within a given date range.
 
 ## Setup
 
@@ -35,11 +35,11 @@ Retrieves daily returns for a given stock symbol.
 
 * `symbol` (string): The stock symbol to retrieve returns for.
 
-* `from` (string, optional): The starting date for the return data. Should be in `yyyy-MM-dd` format. If not provided,
-  defaults to first day of the current year.
+* `from` (string, optional): The starting date for the return data. Recommended format is `yyyy-MM-dd`, but anything which `DateTime.Parse()` can parse will work. If not provided,
+  or if parsing fails, defaults to first day of the current year.
 
-* `to` (string, optional): The end date for the return data. Should be in `yyyy-MM-dd` format. If not provided, defaults
-  to today's date.
+* `to` (string, optional): The end date for the return data. Recommended format is `yyyy-MM-dd`, but anything which `DateTime.Parse()` can parse will work. If not provided,
+  or if parsing fails, defaults to today's date.
 
 #### Response
 
