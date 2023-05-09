@@ -16,7 +16,7 @@ daily returns. The API provides an endpoint for retrieving returns for a specifi
 ```
 
 * You can run the project using `dotnet run` or configure your IDE to run using the
-  provided `Properties/runSettngs.json`.
+  provided `Properties/runSettings.json`.
 * This project is equipped with **Swagger**, which will be accessible at`https://localhost:7179/swagger/index.html`
 
 ### Authorization
@@ -27,7 +27,7 @@ using `apiKey=yourKey` or as a header value of `X-API-KEY: your-key`.
 
 ## Endpoints
 
-### GET /api/returns/{symbol}
+### GET /returns/{symbol}
 
 Retrieves daily returns for a given stock symbol.
 
