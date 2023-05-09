@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static RedArrisApi.DateTimeExtensions;
@@ -73,9 +74,12 @@ public class ReturnsController : ControllerBase
                 ToDate = DateTime.Parse(to)
             });
         }
-        catch (Exception _)
+        catch (Exception ex)
         {
-            return new StatusCodeResult(500);
+            return new ObjectResult(ex.Message)
+            {
+                StatusCode = (int)HttpStatusCode.InternalServerError
+            };
         }
     }
 }

@@ -22,7 +22,8 @@ public class PricesService : IPricesService
 
         // Exception will be caught in the controller
         if (!response.IsSuccessStatusCode)
-            throw new Exception(response.ReasonPhrase);
+            throw new Exception("Non-successful response from IEX API while trying to retrieve price data. " +
+                                $"Status: {response.StatusCode} - {response.ReasonPhrase}");
 
         return await response.Content.ReadAsAsync<IEnumerable<IexPriceDto>>();
     }

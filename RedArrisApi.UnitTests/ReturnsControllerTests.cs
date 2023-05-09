@@ -90,7 +90,7 @@ public class ReturnsControllerTests
 
         response.Should().NotBeNull();
 
-        response.As<StatusCodeResult>().StatusCode.Should().Be(500);
+        response.As<ObjectResult>().StatusCode.Should().Be(500);
     }
 
     [TestMethod]
@@ -103,6 +103,6 @@ public class ReturnsControllerTests
 
         response.Should().NotBeNull();
 
-        response.As<StatusCodeResult>().StatusCode.Should().Be(500);
+        response.As<ObjectResult>().StatusCode.Should().Be(500);
     }
 }
