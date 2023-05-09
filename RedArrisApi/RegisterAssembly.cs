@@ -8,7 +8,6 @@ public static class RegisterAssembly
     public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAutoMapper(typeof(RegisterAssembly));
-        services.AddSwaggerGen();
         services.AddControllers();
 
         services.ConfigureIexSettings(configuration);
@@ -43,7 +42,20 @@ public static class RegisterAssembly
             };
             var requirement = new OpenApiSecurityRequirement
             {
-                {key, new List<string>()}
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "ApiKey"
+                        },
+                        Scheme = "ApiKeyScheme",
+                        Name = "X-API-KEY",
+                        In = ParameterLocation.Header,
+                    },
+                    new List<string>()
+                }
             };
             o.AddSecurityRequirement(requirement);
         });
