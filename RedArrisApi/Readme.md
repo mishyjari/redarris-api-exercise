@@ -4,15 +4,21 @@ This project is a simple RESTful API that retrieves historical stock price data 
 
 ## Setup
 
-* Create a `secrets.json` file in the project root to store your IEX Api Key
+* Create a `secrets.json` file in the project root to store your IEX Api Key and the Api key to use as this applications token
 
 ```
 {
-  "IexApiKey": "your-api-key"
+  "IexApiKey": "your-iex-api-key",
+  "ApiKey": "anything-you-like"
 }
 ```
 * You can run the project using `dotnet run` or configure your IDE to run using the provided `Properties/runSettngs.json`.
 * This project is equipped with **Swagger**, which will be accessible at`https://localhost:7179/swagger/index.html`
+
+###Authorization
+
+This application is equipped with a simple api token scheme. This token is defined in the `ApiKey` property in your `secrets.json` file. 
+It is configued such that the token can be provided as either a query parameter using `apiKey=yourKey` or as a header value of `X-API-KEY: your-key`.
 
 ## Endpoints
 

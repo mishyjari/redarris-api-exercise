@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
 
 namespace RedArrisApi;
 
@@ -11,10 +12,40 @@ public static class RegisterAssembly
         services.AddControllers();
 
         services.ConfigureIexSettings(configuration);
+        services.ConfigureTokenScheme();
 
         services.AddScoped<ReturnsController>();
         services.AddTransient<IPricesService, PricesService>();
         services.AddTransient<IReturnsService, ReturnsService>();
+    }
+
+    private static void ConfigureTokenScheme(this IServiceCollection services)
+    {
+        services.AddSwaggerGen(o =>
+        {
+            o.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme()
+            {
+                In = ParameterLocation.Header,
+                Name = "X-API-KEY",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "ApiKeyScheme"
+            });
+            
+            var key = new OpenApiSecurityScheme()
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "X-API-KEY"
+                },
+                In = ParameterLocation.Header
+            };
+            var requirement = new OpenApiSecurityRequirement
+            {
+                { key, new List<string>() }
+            };
+            o.AddSecurityRequirement(requirement);
+        });
     }
 
     // Configure settings used for IEX, taking the API Key from secrets.json and register with DI
@@ -46,6 +77,8 @@ public static class RegisterAssembly
         app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "RedArris Stock API v1"); });
 
         app.UseRouting();
+        
+        app.UseMiddleware<ApiKeyMiddleware>();
 
         app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
 
