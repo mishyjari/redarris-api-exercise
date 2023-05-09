@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedArrisApi", "RedArrisApi\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedArrisApi.UnitTests", "RedArrisApi.UnitTests\RedArrisApi.UnitTests.csproj", "{96D47F03-58A9-4BFB-95F9-B8A520EE6DC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedArrisApi.IntegrationTests", "RedArrisApi.IntegrationTests\RedArrisApi.IntegrationTests.csproj", "{AA3B1EEC-EEC1-45D0-801B-435FA35513FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{96D47F03-58A9-4BFB-95F9-B8A520EE6DC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96D47F03-58A9-4BFB-95F9-B8A520EE6DC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96D47F03-58A9-4BFB-95F9-B8A520EE6DC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA3B1EEC-EEC1-45D0-801B-435FA35513FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA3B1EEC-EEC1-45D0-801B-435FA35513FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA3B1EEC-EEC1-45D0-801B-435FA35513FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA3B1EEC-EEC1-45D0-801B-435FA35513FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

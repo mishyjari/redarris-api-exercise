@@ -1,11 +1,19 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Moq.Protected;
+using Newtonsoft.Json;
+using static RedArrisApi.UnitTests.Helpers;
 
 namespace RedArrisApi.UnitTests;
 
@@ -13,7 +21,7 @@ namespace RedArrisApi.UnitTests;
 public class PricesServiceTests
 {
     private readonly Mock<IHttpClientFactory> _httpClientFactoryMock = new Mock<IHttpClientFactory>();
-    private Mock<IexSettings> _iexSettingsMock = new();
+    private IexSettings _iexSettings = new();
     private readonly IPricesService _pricesService;
 
     public PricesServiceTests()
@@ -21,38 +29,36 @@ public class PricesServiceTests
         var httpClient = new HttpClient(new HttpClientHandler());
         _httpClientFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(httpClient);
 
-        _pricesService = new PricesService(_httpClientFactoryMock.Object, new IexSettings());
+        _iexSettings.IexApiKey = "fake_key";
+
+        _pricesService = new PricesService(_httpClientFactoryMock.Object, _iexSettings);
     }
 
     [TestMethod]
     public async Task GetsPricesAsync()
     {
-        var httpClient = new Mock<HttpClient>();
-        httpClient.Setup(x => x.BaseAddress).Returns(new Uri("http://localhost"));
-        httpClient.Setup(x => x.SendAsync(It.IsAny<HttpRequestMessage>(), CancellationToken.None))
-            .ReturnsAsync(new HttpResponseMessage
+        var mockHandler = new Mock<HttpMessageHandler>();
+        mockHandler.Protected()
+            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(() => new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = new StringContent("[{\"date\":\"2022-05-01\",\"open\":100.0,\"close\":101.0}]"),
+                Content = new StringContent(IexSampleResponseJsonString, Encoding.UTF8, "application/json")
             });
+
+        var httpClient = new HttpClient(mockHandler.Object);
+        httpClient.DefaultRequestHeaders.Accept.Clear();
+        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         _httpClientFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>()))
-            .Returns(httpClient.Object);
-        
-        _iexSettingsMock.SetupGet(x => x.IexPricesUrl)
-            .Returns("https://sandbox.iexapis.com/stable/stock");
-        _iexSettingsMock.SetupGet(x => x.IexApiKey)
-            .Returns("fakeApiKey");
-        _iexSettingsMock.SetupGet(x => x.IexHttpClientName)
-            .Returns("iexHttpClient");
+            .Returns(httpClient);
 
-        var pricesService = new PricesService(
-            _httpClientFactoryMock.Object, 
-            _iexSettingsMock.Object);
+        var result = await _pricesService.GetPricesAsync("MSFT", "2022-05-01", "2022-05-01");
 
-        // Act
-        var result = await pricesService.GetPricesAsync("AAPL", "2022-05-01", "2022-05-01");
+        result.Should().NotBeNull();
 
-        // Assert
-        Assert.IsNotNull(result);
+        var deserializedSampleData =
+            JsonConvert.DeserializeObject<IEnumerable<IexPriceResponse>>(IexSampleResponseJsonString);
+
+        result.Count().Should().Be(deserializedSampleData.Count());
     } 
 }

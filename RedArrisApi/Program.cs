@@ -1,6 +1,6 @@
 namespace RedArrisApi;
 
-public static class Program
+public class Program
 {
     public static void Main(string[] args)
     {
